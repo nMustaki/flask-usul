@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 from werkzeug.security import check_password_hash
-from flask import Blueprint, render_template, flash, redirect, request, url_for
+from flask import render_template, flash, redirect, request, url_for
 from flask.ext.login import login_required, login_user, logout_user, confirm_login
 from app.models.user import User
-
-
-mod = Blueprint('auth', __name__, url_prefix='/auth')
+from . import mod
 
 
 @mod.route("/login", methods=["GET", "POST"])

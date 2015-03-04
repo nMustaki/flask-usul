@@ -27,8 +27,8 @@ def configure_configuration(app, devel, testing):
 
 
 def configure_extensions(app):
-    from app.configuration.extensions.database import initDb
-    initDb(app)
+    from app.configuration.extensions.database import initDatabase
+    initDatabase(app)
 
     # Flask login
     from app.configuration.extensions.login import initLogin
@@ -86,5 +86,5 @@ def configure_logging(app):
 def configure_blueprints(app):
     from app.blueprints.home import mod as home_module
     app.register_blueprint(home_module)
-    from app.blueprints.auth.views import mod as auth_module
+    from app.blueprints.auth import mod as auth_module
     app.register_blueprint(auth_module)

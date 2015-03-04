@@ -9,6 +9,11 @@ From http://keepachangelog.com
 ### Fixed
 ### Removed
 
+## [0.0.3] - 2015-03-04
+### Changed
+- more doc
+- standardize the way blueprints are declared and called
+
 ## [0.0.2] - 2015-03-04
 ### Removed
 - old ctags files

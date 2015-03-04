@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, current_app, session, g, redirect, url_for
+from flask import Blueprint, current_app, session, g, redirect, url_for
 
 
 mod = Blueprint('home', __name__, url_prefix="/<lang_code>")
-
-
-@mod.route('/')
-def index():
-    return render_template("index.html")
 
 
 @mod.url_defaults
