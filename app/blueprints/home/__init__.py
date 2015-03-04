@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
-from itertools import groupby
 from flask import Blueprint, render_template, current_app, session, g, redirect, url_for
-from app.models.dynelem import DynElem
 
 
 mod = Blueprint('home', __name__, url_prefix="/<lang_code>")
+
+
+@mod.route('/')
+def index():
+    return render_template("index.html")
 
 
 @mod.url_defaults
@@ -25,12 +28,3 @@ def pull_lang_code(endpoint, values):
 def change(new_lang_code):
     session['lang_code'] = new_lang_code
     return redirect(url_for('home.index'))
-
-
-@mod.route('/')
-def index():
-    dico = {}
-    elems = DynElem.query.all()
-    for key, group in groupby(elems, lambda x: x.elem_type):
-        dico[key] = [x for x in group]
-    return render_template("index.html", dico=dico)
