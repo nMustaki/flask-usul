@@ -10,7 +10,7 @@ def initAssets(app):
         'js/vendor/jquery-1.11.2.min.js', 'js/vendor/bootstrap.min.js', 'js/custom.js',
         output='js/packed.js', filters='rjsmin')
     css = Bundle(
-        'css/vendor/bootstrap.min.css', 'css/utils.css', 'css/home*.css',
+        'css/vendor/bootstrap.min.css', 'css/utils.css', 'css/custom.css',
         output='css/packed.css', filters='cssmin')
     assets.register('js_all', js)
     assets.register('css_all', css)
