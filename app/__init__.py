@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pkgutil
+import importlib
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, render_template
@@ -23,28 +25,26 @@ def configure_configuration(app, devel, testing):
     if app.debug:
         app.config["ASSETS_DEBUG"] = True
         app.config["BCRYPT_LOG_ROUNDS"] = 1
-    app.config.from_object('app.config')
+    app.config.from_object('app.configuration.config')
 
 
 def configure_extensions(app):
-    from app.configuration.extensions.database import initDatabase
-    initDatabase(app)
+    app.logger.info("Importing extensions")
+    from app.configuration.extensions.database import init
+    init(app)
 
-    # Flask login
-    from app.configuration.extensions.login import initLogin
-    initLogin(app)
-
-    # flask-admin
-    from app.configuration.extensions.admin import initAdmin
-    initAdmin(app)
-
-    # assets
-    from app.configuration.extensions.assets import initAssets
-    initAssets(app)
-
-    # Babel
-    from app.configuration.extensions.babel import initBabel
-    initBabel(app)
+    imported = []
+    errors = []
+    for _, name, _ in pkgutil.walk_packages(['app/configuration/extensions'], prefix="app.configuration.extensions."):
+        try:
+            modu = importlib.import_module(name)
+            modu.init(app)
+            imported.append(name)
+        except Exception as e:
+            errors.append(name + " : " + str(e))
+    app.logger.info("Successfully imported extensions : " + ", ".join(imported))
+    if len(errors):
+        app.logger.error("Extensions import errors : " + ", ".join(errors))
 
 
 ##################
@@ -73,8 +73,8 @@ def configure_logging(app):
         app.config["LOG_FILENAME"], 'a', 1 * 1024 * 1024, 1)
     file_handler.setFormatter(logging.Formatter(
         '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
-    app.logger.setLevel(logging.WARNING)
-    file_handler.setLevel(logging.WARNING)
+    app.logger.setLevel(logging.INFO)
+    file_handler.setLevel(logging.INFO)
     app.logger.addHandler(file_handler)
     app.logger.info('startup')
     app.logger.info(app.config["BASEDIR"])
@@ -84,7 +84,20 @@ def configure_logging(app):
 # Blueprints #
 ##############
 def configure_blueprints(app):
-    from app.blueprints.home import mod as home_module
-    app.register_blueprint(home_module)
-    from app.blueprints.auth import mod as auth_module
-    app.register_blueprint(auth_module)
+    imported = []
+    imported_names = []
+    import_errors = []
+    app.logger.info("Importing blueprints")
+    for _, name, _ in pkgutil.walk_packages(['app/blueprints'], prefix="app.blueprints."):
+        try:
+            modu = importlib.import_module(name)
+            mod = modu.mod
+            if mod not in imported:
+                app.register_blueprint(modu.mod)
+                imported.append(mod)
+                imported_names.append(name)
+        except Exception as e:
+            import_errors.append(name + " : " + str(e))
+    app.logger.info("Successfully imported blueprints : " + ", ".join(imported_names))
+    if len(import_errors):
+        app.logger.error("Blueprints import error : " + ", ".join(import_errors))

@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 import base64
 from app.models.user import User
-from app.configuration.extensions import login_manager
+from flask.ext.login import LoginManager
 
 
-def initLogin(app):
+login_manager = None
+
+
+def init(app):
+    global login_manager
+    login_manager = LoginManager()
     login_manager.login_view = "auth.login"
     login_manager.session_protection = "strong"
     login_manager.login_message = u"Veuillez vous authentifier pour accéder à cette page."

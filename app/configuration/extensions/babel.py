@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
 from flask import session, g, current_app
-from app.configuration.extensions import babel
+from flask.ext.babel import Babel
 
 
-def initBabel(app):
+babel = None
+
+
+def init(app):
+    global babel
+    babel = Babel()
     babel.init_app(app)
 
     # @app.before_request

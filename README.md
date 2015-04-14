@@ -9,20 +9,11 @@ Inspired from Rails and cookiecutter-flask (https://github.com/sloria/cookiecutt
 
 ## Blueprints
 - Add your blueprint in app/blueprints/blueprint_name (see bellow for details)
-- import it in app/__init__.py, in the function configure_blueprints()
+- There are autoloaded if they contain a mod variable
 
-## Extenions
-- in app/configuration/extensions
-- add the standalone extension  object in __init__.py
-```python
-db = SQLAlchemy()
-```
-- if needed, add a file with a function importNAME-OF-EXTENSION()
-- call this function in app/__init__.py, function configure_extensions(app):
-```python
-from app.configuration.extensions.database import initDb
-initDb(app)
-```
+## Extensions
+- in app/configuration/extensions/filename
+- There are autoloaded if the file contains a function named "init" which takes the app as parameter
 
 # Tree
 ## app/blueprints
@@ -39,7 +30,7 @@ mod = Blueprint('home', __name__, url_prefix="/<lang_code>")
 ## app/configuration
 ### extensions
 - __init__.py :  standalone extension object declaration
-- each file should contain an initSOMETHING(app) function to be called when app will be created
+- each file should contain an init(app) function to be called when app will be created
 
 ### various config files
 - config : available in app.config

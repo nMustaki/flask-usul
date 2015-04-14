@@ -1,7 +1,7 @@
 import re
 from werkzeug.security import check_password_hash
 from flask.ext.login import UserMixin
-from app.configuration.extensions import db
+from app.configuration.extensions.database import db
 
 
 class User(db.Model, UserMixin):

@@ -9,15 +9,24 @@ From http://keepachangelog.com
 ### Fixed
 ### Removed
 
+
+## [0.1] - 2015-04-14
+### Changed
+- extensions and blueprints are autoloaded
+- requirements.text renamed into requirements.txt
+
+
 ## [0.0.3] - 2015-03-04
 ### Changed
 - more doc
 - standardize the way blueprints are declared and called
 
+
 ## [0.0.2] - 2015-03-04
 ### Removed
 - old ctags files
 - remnants of old code
+
 
 ## [0.0.1] - 2015-03-04
 - first release

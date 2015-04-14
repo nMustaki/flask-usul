@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 from flask.ext.assets import Bundle
-from app.configuration.extensions import assets
+# from app.configuration.extensions import assets
+from flask.ext.assets import Environment
 
 
-def initAssets(app):
+assets = None
+
+
+def init(app):
+    global assets
+    assets = Environment()
     assets.init_app(app)
 
     js = Bundle(
